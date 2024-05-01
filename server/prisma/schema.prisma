@@ -12,3 +12,44 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  ADMIN
+  STUDIO_OWNER
+  CUSTOMER
+}
+
+model User {
+  id String @id @default(uuid())
+  fullName String
+  email String @unique
+  password String
+  type Role
+  ownedStudios Studio[]
+  ownedReservations Reservations[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Reservations {
+  customer User @relation(fields: [customerId], references: [id])
+  customerId String
+  Studio Studio @relation(fields: [studioId], references: [id])
+  studioId String
+  startDate DateTime
+  endDate DateTime
+  @@id([customerId, studioId, startDate, endDate])
+}
+
+model Studio {
+  id String @id @default(uuid())
+  name String @unique
+
+  owner User @relation(fields: [ownerId], references: [id])
+  ownerId String
+
+  reservations Reservations[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
