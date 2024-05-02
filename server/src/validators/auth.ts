@@ -59,4 +59,12 @@ export const signup = [
   validateMiddleware,
 ];
 
-
+export const login = [
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Email is invalid"),
+  body("password").notEmpty().withMessage("password is required"),
+  validateMiddleware,
+];
