@@ -5,6 +5,7 @@ import morgan from "morgan";
 import env from "./config/validateEnv";
 import allowedOrgins from "./config/allowedOrgins";
 import errorMiddleware from "./middlewares/errorMiddleware";
+import mountRoutes from "./routes";
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");
 });
+
+mountRoutes(app);
 
 app.use(errorMiddleware);
 

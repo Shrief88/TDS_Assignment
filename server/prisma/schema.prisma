@@ -27,6 +27,7 @@ model User {
   type Role
   ownedStudios Studio[]
   ownedReservations Reservations[]
+  refreshToken String? 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
