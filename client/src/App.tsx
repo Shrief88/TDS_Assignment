@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <div className="relative flex flex-col min-h-screen">
           <div className="flex-grow flex-1">
             <Routes>
+              <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
             </Routes>

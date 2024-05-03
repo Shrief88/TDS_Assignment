@@ -19,6 +19,7 @@ module.exports = {
     extend: {
       fontFamily: {
         Poppins: ["Poppins"],
+        Inter: ["Inter"],
       },
       fontSize: {
         sm: ['14px', '20px'],
