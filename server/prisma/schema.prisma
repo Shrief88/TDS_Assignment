@@ -31,7 +31,7 @@ enum WorkingDay {
 
 model User {
   id String @id @default(uuid())
-  fullName String
+  fullName String 
   email String @unique
   password String
   type Role
@@ -56,8 +56,8 @@ model Studio {
   id String @id @default(uuid())
   name String @unique
   availableDays   WorkingDay[] 
-  startTime       DateTime
-  endTime         DateTime
+  startTime       Int
+  endTime         Int
   address         String
   images          String[]
 
