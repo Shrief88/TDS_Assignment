@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { signUpSchema, TSignUpSchema } from "@/validation/signup";
+import { NavLink } from "react-router-dom";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+
+import { signUpSchema, TSignUpSchema } from "@/validation/signup";
 
 const SignUp = () => {
   const {
@@ -29,7 +31,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full px-6 py-20 bg-muted flex flex-col justify-center items-center">
+    <div className="h-screen w-full px-6 py-20 bg-muted flex flex-col justify-center items-center">
       <Card className="container bg-card px-7 py-11 rounded-[40px] max-w-[540px] shadow-sm shadow-slate-300">
         <CardHeader>
           <div>
@@ -38,10 +40,11 @@ const SignUp = () => {
                 Welcome to
                 <span className="text-primary font-semibold"> TDS</span>
               </p>
-              <div className="w-20 lg:w-40">
-                <p className="text-sm text-secondary">
-                  Have an account? <span className="text-primary">Sign in</span>
-                </p>
+              <div className="w-20 md:w-36">
+                <p className="text-sm text-secondary">Have an account ?</p>
+                <NavLink to="/login" className="text-primary cursor-pointer">
+                  Sign in
+                </NavLink>
               </div>
             </div>
           </div>
@@ -117,9 +120,7 @@ const SignUp = () => {
                 )}
               </div>
               <div className="flex flex-col gap-4">
-                <Label htmlFor="type" className="text-sm">
-                  User Type
-                </Label>
+                <Label className="text-sm">User Type</Label>
                 <Select onValueChange={(value) => reset({ type: value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select User Type" />
@@ -138,7 +139,7 @@ const SignUp = () => {
               <div className="flex justify-center">
                 <Button
                   type="submit"
-                  className="w-full shadow-sm shadow-[#779341]"
+                  className="w-full shadow-sm shadow-[#779341] rounded-2xl"
                 >
                   Sign up
                 </Button>
