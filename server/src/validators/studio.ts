@@ -4,15 +4,7 @@ import prisma from "../config/prisma";
 import validateMiddleware from "../middlewares/validateMiddleware";
 
 export const getStudio = [
-  param("id").custom(async (id) => {
-    const studio = await prisma.studio.findUnique({
-      where: {
-        id,
-      },
-    });
-    if (!studio) throw new Error("Studio not found");
-    return true;
-  }),
+  param("id").isUUID().withMessage("Invalid studio ID"),
   validateMiddleware,
 ];
 
@@ -82,17 +74,19 @@ export const createStudio = [
 ];
 
 export const deleteStudio = [
-  param("id").custom(async (id, { req }) => {
-    const studio = await prisma.studio.findUnique({
-      where: {
-        id,
-      },
-    });
-    if (!studio) throw new Error("Studio not found");
+  param("id")
+    .isUUID()
+    .withMessage("Invalid studio ID")
+    .custom(async (id, { req }) => {
+      const studio = await prisma.studio.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (!studio) throw new Error("Studio not found");
+      if (studio.ownerId !== req.user.id) throw new Error("Forbidden");
 
-    if (studio.ownerId !== req.user.id) throw new Error("Forbidden");
-
-    return true;
-  }),
+      return true;
+    }),
   validateMiddleware,
 ];

@@ -72,7 +72,7 @@ export const deleteStudio: RequestHandler = async (
   next,
 ) => {
   try {
-    const studio = await prisma.studio.delete({
+    await prisma.studio.delete({
       where: {
         id: req.params.id,
       },
