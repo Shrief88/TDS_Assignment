@@ -13,7 +13,6 @@ authRouter.get("/logout", authController.protectRoute, authController.logout);
 
 authRouter.get(
   "/refresh",
-  authController.protectRoute,
   authController.refreshAccessToken,
 );
 

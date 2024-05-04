@@ -126,6 +126,8 @@ export const logout: RequestHandler = async (req: CustomRequest, res, next) => {
   }
 };
 
+// @route GET /api/v1/auth/refresh
+// @access Public
 export const refreshAccessToken: RequestHandler = async (req, res, next) => {
   try {
     let token = "";

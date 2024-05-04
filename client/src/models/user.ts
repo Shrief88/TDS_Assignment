@@ -1,6 +1,6 @@
 interface IUser {
   id: string;
-  fullname: string;
+  fullName: string;
   email: string;
   type: string;
   createdAt: Date;
