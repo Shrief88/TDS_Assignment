@@ -24,7 +24,7 @@ const Login = () => {
 
   return (
     <div className="h-screen w-full px-6 py-20 bg-muted flex flex-col justify-center items-center">
-      <Card className="container bg-card px-7 py-11 rounded-[40px] max-w-[540px] shadow-sm shadow-slate-300">
+      <Card className="container px-7 py-11 rounded-[40px] max-w-[540px]">
         <CardHeader>
           <div>
             <div className="flex justify-between">
