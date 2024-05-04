@@ -1,3 +1,5 @@
-const allowedOrgins: string[] = []; // Just empty for now
+const allowedOrgins: string[] = [
+  "http://localhost:5173",
+]; // Just empty for now
 
 export default allowedOrgins;

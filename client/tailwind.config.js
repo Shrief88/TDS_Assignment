@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -20,14 +20,15 @@ module.exports = {
       fontFamily: {
         Poppins: ["Poppins"],
         Inter: ["Inter"],
+        Mulish: ["Mulish"],
       },
       fontSize: {
-        sm: ['14px', '20px'],
-        base: ['16px', '24px'],
-        lg: ['20px', '28px'],
-        xl: ['24px', '32px'],
-        '4xl': ['40px', '60px'],
-        '6xl': ['55px', '82px'],
+        sm: ["14px", "20px"],
+        base: ["16px", "24px"],
+        lg: ["25px", "31px"],
+        xl: ["29px", "35px"],
+        "4xl": ["40px", "60px"],
+        "6xl": ["55px", "82px"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -86,4 +87,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
