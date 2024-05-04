@@ -1,8 +1,10 @@
 import { Route, Routes } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner"
 
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
+import Studio from "./pages/Studio";
 
 function App() {
   return (
@@ -14,7 +16,9 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/studio/:id" element={<Studio />} />
             </Routes>
+            <Toaster />
           </div>
         </div>
       </div>

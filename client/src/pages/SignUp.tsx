@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -15,8 +15,16 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { signUpSchema, TSignUpSchema } from "@/validation/signup";
+import { toast } from "sonner";
+import { axiosClient } from "@/api/axios";
+import { useAppDispatch } from "@/store";
+import { AxiosError } from "axios";
+import { authStateServices } from "@/reducers/authSlice";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
@@ -26,8 +34,35 @@ const SignUp = () => {
     resolver: yupResolver(signUpSchema),
   });
 
-  const onSubmit = (data: TSignUpSchema) => {
-    console.log(data);
+  const onSubmit = async (data: TSignUpSchema) => {
+    try {
+      if (data.confirmPassword !== data.password) {
+        toast.error("Passwords do not match");
+        return;
+      }
+      toast.loading("Logging in...", { duration: Infinity });
+      const res = await axiosClient.post("auth/signup", data);
+      toast.dismiss();
+      dispatch(
+        authStateServices.actions.setAuthState({
+          accessToken: res.data.accessToken,
+          user: res.data.user,
+        })
+      );
+      localStorage.setItem("refreshToken", res.data.refreshToken);
+      navigate("/");
+    } catch (err) {
+      toast.dismiss();
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          toast.error(err.response.data.message);
+        } else if (err.response?.status === 400) {
+          toast.error(err.response.data.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+      }
+    }
   };
 
   return (

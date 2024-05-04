@@ -1,25 +1,56 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { loginSchema, TLoginSchema } from "@/validation/login";
+import { toast } from "sonner";
+import { useNavigate, NavLink } from "react-router-dom";
+import { AxiosError } from "axios";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { NavLink } from "react-router-dom";
+
+import { loginSchema, TLoginSchema } from "@/validation/login";
+import { axiosClient } from "@/api/axios";
+import { useAppDispatch } from "@/store";
+import { authStateServices } from "@/reducers/authSlice";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<TLoginSchema>({
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = (data: TLoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: TLoginSchema) => {
+    try {
+      toast.loading("Logging in...", { duration: Infinity });
+      const res = await axiosClient.post("auth/login", data);
+      toast.dismiss();
+      dispatch(
+        authStateServices.actions.setAuthState({
+          accessToken: res.data.accessToken,
+          user: res.data.user,
+        })
+      );
+      localStorage.setItem("refreshToken", res.data.refreshToken);
+      navigate("/");
+    } catch (err) {
+      toast.dismiss();
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 404) {
+          toast.error(err.response.data.message);
+        } else if (err.response?.status === 400) {
+          toast.error(err.response.data.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+      }
+    }
   };
 
   return (
