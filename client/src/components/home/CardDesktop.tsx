@@ -1,14 +1,16 @@
 import { MapPin } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
+import { NavLink } from "react-router-dom";
 
 interface CardDesktopProps {
+  id: string;
   cover: string;
   name: string;
   address: string;
 }
 
-const CardDesktop = ({ cover, name, address }: CardDesktopProps) => {
+const CardDesktop = ({ id, cover, name, address }: CardDesktopProps) => {
   return (
     <Card className="rounded-3xl overflow-hidden">
       <CardHeader>
@@ -18,7 +20,9 @@ const CardDesktop = ({ cover, name, address }: CardDesktopProps) => {
         />
       </CardHeader>
       <CardContent className="px-4 py-7">
-        <p className="font-Mulish font-semibold text-lg">{name}</p>
+        <NavLink to={`/studio/${id}`} className="hover:underline">
+          <p className="font-Mulish font-semibold text-lg">{name}</p>
+        </NavLink>
       </CardContent>
       <CardFooter className="px-4 py-3 border-t w-full">
         <div className="flex w-full gap-1 justify-between flex-nowrap items-center">

@@ -5,7 +5,7 @@ interface IStudio {
   startTime: number;
   endTime: number;
   address: string;
-  availableDays: string[];
+  availableDays: number[];
   createdAt: Date;
   updatedAt: Date;
   images: string[];

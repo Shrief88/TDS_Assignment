@@ -30,6 +30,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14">
           {studios.map((studio) => (
             <CardDesktop
+              id={studio.id}
               key={studio.id}
               cover={studio.images[0]}
               name={studio.name}

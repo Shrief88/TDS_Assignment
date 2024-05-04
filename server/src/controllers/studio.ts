@@ -1,4 +1,5 @@
 import { type RequestHandler } from "express";
+import createHttpError from "http-errors";
 
 import prisma from "../config/prisma";
 import { type CustomRequest } from "./auth";
@@ -30,7 +31,37 @@ export const getStudio: RequestHandler = async (req, res, next) => {
         id: req.params.id,
       },
     });
-    res.status(200).json({ data: studio });
+
+    if (!studio) throw createHttpError(404, "Studio not found");
+
+    // Check if the studio is open now
+    let isOpen = true;
+    const time = new Date();
+    const hour = time.getHours();
+    const day = time.getDay();
+    console.log(day, studio.availableDays);
+    if (
+      hour < studio.startTime ||
+      hour > studio.endTime ||
+      !studio.availableDays.some((d) => d === day)
+    ) {
+      isOpen = false;
+    }
+
+    // Check if the studio has no reservations right now
+    const reservations = await prisma.reservations.findMany({
+      where: {
+        studioId: studio.id,
+      },
+    });
+
+    const hasReservation = reservations.some(
+      (reservation) =>
+        reservation.startDate.getTime() <= time.getTime() &&
+        reservation.endDate.getTime() >= time.getTime(),
+    );
+
+    res.status(200).json({ data: studio, isOpen, hasReservation });
   } catch (err) {
     next(err);
   }

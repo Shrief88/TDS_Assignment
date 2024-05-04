@@ -111,7 +111,7 @@ export const createReservation: RequestHandler = async (
       }
     });
 
-    if (flag) throw createHttpError(403, "Reservation already exists");
+    if (flag) throw createHttpError(409, "Reservation already exists");
 
     const reservation = await prisma.reservations.create({
       data: {
