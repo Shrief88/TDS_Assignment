@@ -14,8 +14,8 @@ export const getStudios: RequestHandler = async (req, res, next) => {
       take: limit,
       skip: (page - 1) * limit,
     });
-    
-    res.status(200).json({ data: studios });
+
+    res.status(200).json({ itemsCount: studios.length, data: studios });
   } catch (err) {
     next(err);
   }
@@ -48,7 +48,9 @@ export const createStudio: RequestHandler = async (
       data: {
         name: req.body.name,
         ownerId: req.user.id,
-        availableDays: req.body.availableDays,
+        availableDays: req.body.availableDays.map((day: string) =>
+          parseInt(day),
+        ),
         startTime: parseInt(req.body.startTime) || req.body.startTime,
         endTime: parseInt(req.body.endTime) || req.body.endTime,
         address: req.body.address,

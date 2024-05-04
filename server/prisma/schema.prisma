@@ -19,16 +19,6 @@ enum Role {
   CUSTOMER
 }
 
-enum WorkingDay {
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
-  SUNDAY
-}
-
 model User {
   id String @id @default(uuid())
   fullName String 
@@ -55,7 +45,7 @@ model Reservations {
 model Studio {
   id String @id @default(uuid())
   name String @unique
-  availableDays   WorkingDay[] 
+  availableDays   Int[] 
   startTime       Int
   endTime         Int
   address         String

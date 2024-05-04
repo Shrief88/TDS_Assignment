@@ -10,7 +10,7 @@ const studioRouter = Router();
 
 studioRouter.get("/", studioController.getStudios);
 
-studioRouter.get("/:id", studioController.getStudio);
+studioRouter.get("/:id", studioValidator.getStudio, studioController.getStudio);
 
 studioRouter.post(
   "/",

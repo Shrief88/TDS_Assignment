@@ -3,16 +3,6 @@ import { body, param } from "express-validator";
 import prisma from "../config/prisma";
 import validateMiddleware from "../middlewares/validateMiddleware";
 
-const WorkingDay = [
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
-  "SUNDAY",
-];
-
 export const getStudio = [
   param("id").custom(async (id) => {
     const studio = await prisma.studio.findUnique({
@@ -48,8 +38,10 @@ export const createStudio = [
     .isArray()
     .withMessage("Available days must be an array of strings")
     .custom((value) => {
-      if (!value.every((day: string) => WorkingDay.includes(day))) {
-        throw new Error("Available days must be an array of days");
+      if (
+        !value.every((day: string) => parseInt(day) >= 0 && parseInt(day) <= 6)
+      ) {
+        throw new Error("day should be between 0 and 6");
       }
       return true;
     }),
