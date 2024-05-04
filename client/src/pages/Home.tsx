@@ -27,7 +27,7 @@ const Home = () => {
         <div>
           <p className="font-Inter font-semibold text-xl mb-8 lg:mb-11">Home</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-14 md:gap-x-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14">
           {studios.map((studio) => (
             <CardDesktop
               key={studio.id}
