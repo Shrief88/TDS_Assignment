@@ -10,6 +10,13 @@ const studioRouter = Router();
 
 studioRouter.get("/", studioController.getStudios);
 
+studioRouter.get(
+  "/me",
+  authController.protectRoute,
+  authController.restrictTo("STUDIO_OWNER"),
+  studioController.getStudiosByOwner,
+);
+
 studioRouter.get("/:id", studioValidator.getStudio, studioController.getStudio);
 
 studioRouter.post(

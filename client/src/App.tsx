@@ -5,6 +5,8 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
 import Studio from "./pages/Studio";
+import Reservation from "./pages/Reservation";
+import CreateStudio from "./pages/CreateStudio";
 import PersisttentLogin from "./components/PersisttentLogin";
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
               <Route element={<PersisttentLogin />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/studio/:id" element={<Studio />} />
+                <Route path="/reservation/:id" element={<Reservation />} />
+                <Route path="/create-studio" element={<CreateStudio />} />
               </Route>
             </Routes>
             <Toaster />

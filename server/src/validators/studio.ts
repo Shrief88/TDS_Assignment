@@ -27,11 +27,10 @@ export const createStudio = [
   body("availableDays")
     .notEmpty()
     .withMessage("Available days are required")
-    .isArray()
-    .withMessage("Available days must be an array of strings")
     .custom((value) => {
+      const days = value.split(",");
       if (
-        !value.every((day: string) => parseInt(day) >= 0 && parseInt(day) <= 6)
+        !days.every((day: string) => parseInt(day) >= 0 && parseInt(day) <= 6)
       ) {
         throw new Error("day should be between 0 and 6");
       }
@@ -69,7 +68,11 @@ export const createStudio = [
     .notEmpty()
     .withMessage("Address is required")
     .isString()
-    .withMessage("Address must be a string"),
+    .withMessage("Address must be a string")
+    .isLength({ min: 3 })
+    .withMessage("Name must be at least 3 characters long")
+    .isLength({ max: 50 })
+    .withMessage("Name must be at most 50 characters long"),
   validateMiddleware,
 ];
 

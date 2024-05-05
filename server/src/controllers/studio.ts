@@ -9,7 +9,7 @@ import { type CustomRequest } from "./auth";
 export const getStudios: RequestHandler = async (req, res, next) => {
   try {
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 9;
+    const limit = Number(req.query.limit) || 6;
 
     const studios = await prisma.studio.findMany({
       take: limit,
@@ -48,20 +48,31 @@ export const getStudio: RequestHandler = async (req, res, next) => {
       isOpen = false;
     }
 
-    // Check if the studio has no reservations right now
-    const reservations = await prisma.reservations.findMany({
+    res.status(200).json({ data: studio, isOpen });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @route GET /api/v1/studio/me
+// @access Private (Studio Owner)
+export const getStudiosByOwner: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 6;
+
+    const studios = await prisma.studio.findMany({
       where: {
-        studioId: studio.id,
+        ownerId: req.user.id,
       },
+      take: limit,
+      skip: (page - 1) * limit,
     });
-
-    const hasReservation = reservations.some(
-      (reservation) =>
-        reservation.startDate.getTime() <= time.getTime() &&
-        reservation.endDate.getTime() >= time.getTime(),
-    );
-
-    res.status(200).json({ data: studio, isOpen, hasReservation });
+    res.status(200).json({ itemsCount: studios.length, data: studios });
   } catch (err) {
     next(err);
   }
@@ -79,9 +90,9 @@ export const createStudio: RequestHandler = async (
       data: {
         name: req.body.name,
         ownerId: req.user.id,
-        availableDays: req.body.availableDays.map((day: string) =>
-          parseInt(day),
-        ),
+        availableDays: req.body.availableDays
+          .split(",")
+          .map((day: string) => parseInt(day)),
         startTime: parseInt(req.body.startTime) || req.body.startTime,
         endTime: parseInt(req.body.endTime) || req.body.endTime,
         address: req.body.address,
