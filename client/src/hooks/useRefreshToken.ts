@@ -1,9 +1,11 @@
 import { useAppDispatch } from "@/store";
 import { authStateServices } from "@/reducers/authSlice";
 import { axiosClient } from "@/api/axios";
+import { useNavigate } from "react-router-dom";
 
 const useRefreshToken = () => {
   const dispath = useAppDispatch();
+  const navigate = useNavigate();
 
   const refresh = async () => {
     try {
@@ -15,9 +17,10 @@ const useRefreshToken = () => {
         },
       });
       dispath(authStateServices.actions.setAuthState(response.data));
-      return response;
+      return response.data.accessToken;
     } catch (err) {
       console.log(err);
+      navigate("/login");
     }
   };
 

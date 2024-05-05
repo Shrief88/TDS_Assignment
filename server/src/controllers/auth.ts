@@ -155,7 +155,7 @@ export const refreshAccessToken: RequestHandler = async (req, res, next) => {
     }
   } catch (err) {
     if (err.name === "TokenExpiredError") {
-      next(createHttpError(403, "token expired"));
+      next(createHttpError(401, "token expired"));
     }
     next(err);
   }
@@ -189,7 +189,7 @@ export const protectRoute: RequestHandler = async (
     }
   } catch (err) {
     if (err.name === "TokenExpiredError") {
-      next(createHttpError(403, "token expired"));
+      next(createHttpError(401, "token expired"));
     }
     next(err);
   }
