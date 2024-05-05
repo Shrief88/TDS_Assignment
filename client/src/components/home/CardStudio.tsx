@@ -1,16 +1,19 @@
+import { NavLink, useNavigate } from "react-router-dom";
+
 import { MapPin } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import { NavLink } from "react-router-dom";
 
-interface CardDesktopProps {
+interface CardStudioProps {
   id: string;
   cover: string;
   name: string;
   address: string;
 }
 
-const CardDesktop = ({ id, cover, name, address }: CardDesktopProps) => {
+const CardStudio = ({ id, cover, name, address }: CardStudioProps) => {
+  const navigate = useNavigate();
+
   return (
     <Card className="rounded-3xl overflow-hidden">
       <CardHeader>
@@ -30,7 +33,7 @@ const CardDesktop = ({ id, cover, name, address }: CardDesktopProps) => {
             <MapPin className="text-muted-foreground w-5 h-5" />
             <p className="font-Inter">{address}</p>
           </div>
-          <Button variant="default" className="rounded-3xl">
+          <Button variant="default" className="rounded-3xl" onClick={() => { navigate(`/studio/${id}`)}}>
             Book Now
           </Button>
         </div>
@@ -39,4 +42,4 @@ const CardDesktop = ({ id, cover, name, address }: CardDesktopProps) => {
   );
 };
 
-export default CardDesktop;
+export default CardStudio;

@@ -59,7 +59,6 @@ export const createStudio = [
         throw new Error("End time must be between 0 and 24");
       }
       if (value <= req.body.startTime) {
-        console.log(`${value} <= ${req.body.startTime}`);
         throw new Error("End time must be after start time");
       }
       return true;

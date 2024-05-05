@@ -1,45 +1,21 @@
-import Navbar from "@/components/layout/Navbar";
-import { useEffect, useState } from "react";
-import { axiosClient } from "@/api/axios";
-import IStudio from "@/models/studio";
-import CardDesktop from "@/components/home/CardDesktop";
+import CustomerView from "@/components/home/CustomerView";
+import OwnerView from "@/components/home/OwnerView";
+import AdminView from "@/components/home/AdminView";
+import { useTypedSelector } from "@/store";
 
 const Home = () => {
-  const [studios, setStudios] = useState<IStudio[]>([]);
-
-  const fetchData = async () => {
-    try {
-      const res = await axiosClient.get("studio");
-      setStudios(res.data.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const user = useTypedSelector((state) => state.authState.user);
 
   return (
-    <div className="h-screen w-full flex flex-col items-center">
-      <Navbar />
-      <div className="bg-muted flex-1 w-full px-7 lg:px-36 py-8 lg:py-14">
-        <div>
-          <p className="font-Inter font-semibold text-xl mb-8 lg:mb-11">Home</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14">
-          {studios.map((studio) => (
-            <CardDesktop
-              id={studio.id}
-              key={studio.id}
-              cover={studio.images[0]}
-              name={studio.name}
-              address={studio.address}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
+    <>
+      {user?.type === "STUDIO_OWNER" ? (
+        <OwnerView />
+      ) : user?.type === "ADMIN" ? (
+        <AdminView />
+      ) : (
+        <CustomerView />
+      )}
+    </>
   );
 };
 

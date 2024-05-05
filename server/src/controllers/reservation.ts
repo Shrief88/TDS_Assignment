@@ -8,7 +8,12 @@ import createHttpError from "http-errors";
 // @access Private (Admin)
 export const getReservations: RequestHandler = async (req, res, next) => {
   try {
-    const reservations = await prisma.reservations.findMany();
+    const reservations = await prisma.reservations.findMany({
+      include: {
+        customer: true,
+        studio: true,
+      },
+    });
     res
       .status(200)
       .json({ itemsCount: reservations.length, data: reservations });
@@ -30,6 +35,10 @@ export const getReservationsByUser: RequestHandler = async (
         where: {
           customerId: req.user.id,
         },
+        include: {
+          customer: true,
+          studio: true,
+        },
       });
       res
         .status(200)
@@ -46,6 +55,10 @@ export const getReservationsByUser: RequestHandler = async (
           studioId: {
             in: studios.map((studio) => studio.id),
           },
+        },
+        include: {
+          customer: true,
+          studio: true,
         },
       });
 
@@ -69,6 +82,10 @@ export const getReservationsByStudio: RequestHandler = async (
     const reservations = await prisma.reservations.findMany({
       where: {
         studioId: req.params.id,
+      },
+      include: {
+        customer: true,
+        studio: true,
       },
     });
     res
@@ -95,6 +112,11 @@ export const createReservation: RequestHandler = async (
         reservations: true,
       },
     });
+
+    console.log(req.body);
+
+    req.body.startDate = new Date(req.body.startDate);
+    req.body.endDate = new Date(req.body.endDate);
 
     // check if there is already a reservation
     let flag = false;

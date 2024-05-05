@@ -33,7 +33,6 @@ export const getStudio: RequestHandler = async (req, res, next) => {
     const time = new Date();
     const hour = time.getHours();
     const day = time.getDay();
-    console.log(day, studio.availableDays);
     if (
       hour < studio.startTime ||
       hour > studio.endTime ||

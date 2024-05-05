@@ -19,7 +19,6 @@ const saveImages = (modelName: string, path: string): RequestHandler => {
           req.body.images.push(fileName);
         }),
       );
-      console.log(req.body.images);
     }
     next();
   };
