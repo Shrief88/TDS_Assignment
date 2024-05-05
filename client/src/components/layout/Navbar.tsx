@@ -7,17 +7,18 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 
 const Navbar = () => {
   const user = useTypedSelector((state) => state.authState.user);
-
   const logout = () => {
     localStorage.removeItem("refreshToken");
     window.location.reload();
   };
 
   return (
-    <div className="w-full bg-card font-Inter grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 gap-y-6 py-4 px-4 md:px-8 lg:48 xl:px-60 md:gap-y-0">
-      <div className="order-2 md:order-1 md:col-span-2 lg:col-span-1 flex items-center gap-12">
-        <img src={logo} alt="TDS" className="w-24 hidden md:block" />
-        <div className="flex flex-1 items-center px-3 rounded-lg  md:rounded-full md:max-w-[360px] bg-muted h-11">
+    <div className="w-full bg-card font-Inter grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 gap-y-6 py-4 px-4 md:px-8 lg:px-36 xl:px-60 md:gap-y-0">
+      <div className="order-2 md:order-1 md:col-span-2 lg:col-span-1 flex items-center md:gap-12">
+        <NavLink to="/">
+          <img src={logo} alt="TDS" className="w-24 hidden md:block" />
+        </NavLink>
+        <div className="flex flex-1 items-center px-3 rounded-lg  md:rounded-full  md:max-w-[360px] bg-muted h-11">
           <Search className="mr-4 h-6 w-6 text-muted-foreground shrink-0 opacity-50" />
           <p className="text-muted-foreground text-sm">
             Search for a service or venue

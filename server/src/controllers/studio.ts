@@ -8,13 +8,7 @@ import { type CustomRequest } from "./auth";
 // @access Public
 export const getStudios: RequestHandler = async (req, res, next) => {
   try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 6;
-
-    const studios = await prisma.studio.findMany({
-      take: limit,
-      skip: (page - 1) * limit,
-    });
+    const studios = await prisma.studio.findMany({});
 
     res.status(200).json({ itemsCount: studios.length, data: studios });
   } catch (err) {
@@ -62,17 +56,12 @@ export const getStudiosByOwner: RequestHandler = async (
   next,
 ) => {
   try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 6;
-
     const studios = await prisma.studio.findMany({
       where: {
         ownerId: req.user.id,
       },
-      take: limit,
-      skip: (page - 1) * limit,
     });
-    res.status(200).json({ itemsCount: studios.length, data: studios });
+    res.status(200).json({ data: studios });
   } catch (err) {
     next(err);
   }

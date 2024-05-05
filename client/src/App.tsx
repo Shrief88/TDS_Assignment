@@ -8,6 +8,7 @@ import Studio from "./pages/Studio";
 import Reservation from "./pages/Reservation";
 import CreateStudio from "./pages/CreateStudio";
 import PersisttentLogin from "./components/PersisttentLogin";
+import Layout from "./components/Layout";
 
 function App() {
   return (
@@ -19,10 +20,12 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route element={<PersisttentLogin />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/studio/:id" element={<Studio />} />
-                <Route path="/reservation/:id" element={<Reservation />} />
-                <Route path="/create-studio" element={<CreateStudio />} />
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/studio/:id" element={<Studio />} />
+                  <Route path="/reservation/:id" element={<Reservation />} />
+                  <Route path="/create-studio" element={<CreateStudio />} />
+                </Route>
               </Route>
             </Routes>
             <Toaster />
