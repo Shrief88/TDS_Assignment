@@ -2,6 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Navbar from "@/components/layout/Navbar";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ const OPTIONS: Option[] = [
 
 const CreateStudio = () => {
   const axiosClient = useAxiosToken();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -56,12 +58,13 @@ const CreateStudio = () => {
 
       toast.loading("Creating Studio...", { duration: Infinity });
 
-      const res = await axiosClient.post("studio", formData, {
+      const newStudio = await axiosClient.post("studio", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       toast.dismiss();
+      navigate(`/studio/${newStudio.data.data.id}`);
       toast.success("Studio created successfully");
     } catch (err) {
       toast.dismiss();

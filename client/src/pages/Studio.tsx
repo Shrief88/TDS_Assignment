@@ -1,17 +1,16 @@
-import { axiosClient } from "@/api/axios";
-import Navbar from "@/components/layout/Navbar";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import IStudio from "@/models/studio";
 import { useCallback, useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { MapPin, Star, Clock4 } from "lucide-react";
-import workingDays from "@/models/workingDays";
+
+import { axiosClient } from "@/api/axios";
+import Navbar from "@/components/layout/Navbar";
+import IStudio from "@/models/studio";
+import { Days } from "@/models/calendar";
+import { useTypedSelector } from "@/store";
+import { DeleteStudio } from "@/components/studio/DeleteStudio";
 
 const Studio = () => {
   const { id } = useParams();
@@ -19,6 +18,7 @@ const Studio = () => {
   const [isloading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const user = useTypedSelector((state) => state.authState.user);
 
   const fetchData = useCallback(
     async (id: string) => {
@@ -49,12 +49,13 @@ const Studio = () => {
         {!isloading && studio && (
           <>
             <div className="flex items-center text-muted-foreground gap-1 text-sm">
-              <NavLink to="/">Home</NavLink>
+              <NavLink to="/" className={"hover:underline"}>
+                Home
+              </NavLink>
               <p className="-mt-1.5">.</p>
               <p>{studio.name}</p>
             </div>
             <Card className="my-5">
-              <CardHeader></CardHeader>
               <CardContent className="px-8 py-5">
                 <div className="flex justify-between">
                   <div className="flex flex-col gap-5">
@@ -80,9 +81,25 @@ const Studio = () => {
                       )}
                     </div>
                   </div>
-                  <Button className="rounded-3xl font-semibold" size={"lg"}>
-                    Book now
-                  </Button>
+                  <div className="flex flex-col gap-1">
+                    {user?.type === "STUDIO_OWNER" &&
+                    user.id === studio.ownerId ? (
+                      <>
+                        <Button className="rounded-3xl font-semibold">
+                          Edit
+                        </Button>
+                        <DeleteStudio id={studio.id} />
+                      </>
+                    ) : (
+                      <Button
+                        className="rounded-3xl font-semibold"
+                        size={"lg"}
+                        onClick={() => navigate(`/reservation/${id}`)}
+                      >
+                        Book now
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardContent>
               <CardFooter className="px-8 py-5 border-t">
@@ -99,9 +116,7 @@ const Studio = () => {
                   <div className="flex items-start gap-1">
                     <Clock4 className="text-muted-foreground w-5 h-5" />
                     <p>
-                      {studio?.availableDays
-                        .map((day) => workingDays[day])
-                        .join(", ")}
+                      {studio?.availableDays.map((day) => Days[day]).join(", ")}
                     </p>
                   </div>
                   <div>
