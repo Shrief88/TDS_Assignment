@@ -1,3 +1,5 @@
+import IReservation from "./reservation";
+
 interface IStudio {
   id: string;
   name: string;
@@ -9,6 +11,7 @@ interface IStudio {
   createdAt: Date;
   updatedAt: Date;
   images: string[];
+  reservations: IReservation[];
 }
 
 export default IStudio;

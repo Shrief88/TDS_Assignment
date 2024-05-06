@@ -46,7 +46,7 @@ const Studio = () => {
           <Gallery images={images} maxRows={2} />
 
           <Card className="my-5">
-            <CardContent className="px-8 py-5">
+            <CardContent className="px-3 lg:px-8 py-5">
               <div className="flex flex-col gap-4 md:flex-row md:justify-between">
                 <div className="flex flex-col gap-2 md:gap-5">
                   <p className="font-bold text-xl">{studio.name}</p>
@@ -69,7 +69,7 @@ const Studio = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex justify-center gap-4 md:flex-col md:justify-end">
+                <div className="flex justify-center gap-4 md:flex-col md:justify-start">
                   {user?.type === "STUDIO_OWNER" &&
                   user.id === studio.ownerId ? (
                     <>
@@ -90,7 +90,7 @@ const Studio = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="px-8 py-5 border-t">
+            <CardFooter className="border-t px-3 lg:px-8 py-5">
               <div className="grid gap-y-6 gap-x-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <div className="lg:col-span-1 flex items-start gap-1">
                   <MapPin className="text-muted-foreground w-5 h-5" />

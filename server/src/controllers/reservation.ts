@@ -113,27 +113,51 @@ export const createReservation: RequestHandler = async (
       },
     });
 
-    console.log(req.body);
+    if (!studio) throw createHttpError(404, "Studio not found");
 
-    req.body.startDate = new Date(req.body.startDate);
-    req.body.endDate = new Date(req.body.endDate);
+    const startDate = new Date(req.body.startDate);
+    const endDate = new Date(req.body.endDate);
+    let hasReservation = false;
+    let hasRestDay = false;
 
     // check if there is already a reservation
-    let flag = false;
-    studio?.reservations.map((reservation) => {
-      if (
-        (req.body.startDate >= reservation.startDate.getTime() &&
-          req.body.startDate <= reservation.endDate.getTime()) ||
-        (req.body.endDate >= reservation.startDate.getTime() &&
-          req.body.endDate <= reservation.endDate.getTime()) ||
-        (req.body.startDate <= reservation.startDate.getTime() &&
-          req.body.endDate >= reservation.endDate.getTime())
-      ) {
-        flag = true;
-      }
-    });
+    for (const reservation of studio.reservations) {
+      const resStartDate = reservation.startDate.getTime();
+      const resEndDate = reservation.endDate.getTime();
 
-    if (flag) throw createHttpError(409, "Reservation already exists");
+      if (
+        // Check if startDate overlaps with an existing reservation
+        (startDate.getTime() >= resStartDate &&
+          startDate.getTime() < resEndDate) ||
+        // Check if endDate overlaps with an existing reservation
+        (endDate.getTime() > resStartDate && endDate.getTime() <= resEndDate) ||
+        // Check if the new reservation encompasses an existing reservation
+        (startDate.getTime() < resStartDate && endDate.getTime() > resEndDate)
+      ) {
+        hasReservation = true;
+        break;
+      }
+    }
+
+    // check if there is a rest day between the start and end date
+    const datesInRange = [];
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      datesInRange.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    for (const date of datesInRange) {
+      const day = date.getDay();
+      if (!studio?.availableDays.includes(day)) {
+        hasRestDay = true;
+        break;
+      }
+    }
+
+    if (hasReservation)
+      throw createHttpError(409, "Reservation already exists");
+    if (hasRestDay) throw createHttpError(400, "Please select working days");
 
     const reservation = await prisma.reservations.create({
       data: {

@@ -24,6 +24,9 @@ export const getStudio: RequestHandler = async (req, res, next) => {
       where: {
         id: req.params.id,
       },
+      include: {
+        reservations: true,
+      }
     });
 
     if (!studio) throw createHttpError(404, "Studio not found");

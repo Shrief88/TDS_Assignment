@@ -14,20 +14,15 @@ export const createReservation = [
       if (!studio) throw new Error("Studio not found");
       return true;
     }),
-  body("startDate")
-    .notEmpty()
-    .withMessage("Start time is required")
-    .isDate()
-    .withMessage("Start time must be a date"),
+  body("startDate").notEmpty().withMessage("Start time is required"),
   body("endDate")
     .notEmpty()
     .withMessage("End time is required")
-    .isDate()
-    .withMessage("End time must be a date")
-    .custom((value: Date, { req }) => {
-      if (value.getTime() < req.body.startTime.getTime()) {
+    .custom((value: string, { req }) => {
+      if (new Date(value).getTime() < new Date(req.body.startDate).getTime()) {
         throw new Error("End time must be after start time");
       }
+      return true;
     }),
   validateMiddleware,
 ];
