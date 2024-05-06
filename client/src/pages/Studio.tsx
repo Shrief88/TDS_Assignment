@@ -4,28 +4,47 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { MapPin, Star, Clock4 } from "lucide-react";
 
+import { Gallery, Image } from "react-grid-gallery";
 import { Days } from "@/models/calendar";
 import { useTypedSelector } from "@/store";
 import { DeleteStudio } from "@/components/studio/DeleteStudio";
 import useStudio from "@/hooks/useStudio";
+import { useEffect, useState } from "react";
 
 const Studio = () => {
   const { id } = useParams();
   const { studio, isloading, isError, isOpen } = useStudio(id as string);
+  const [images, setImages] = useState<Image[]>([]);
   const navigate = useNavigate();
   const user = useTypedSelector((state) => state.authState.user);
+
+  useEffect(() => {
+    if (studio) {
+      const tmp: Image[] = studio.images.map((image) => {
+        return {
+          src: import.meta.env.VITE_IMAGES_URI + "/" + image,
+          width: 340,
+          height: 190,
+        } as Image;
+      });
+      setImages(tmp);
+    }
+  }, [studio]);
 
   return (
     <div className="font-Inter xl:px-24">
       {!isloading && studio && (
         <>
-          <div className="flex items-center text-muted-foreground gap-1 text-sm">
+          <div className="flex items-center text-muted-foreground gap-1 text-sm pb-5">
             <NavLink to="/" className={"hover:underline"}>
               Home
             </NavLink>
             <p className="-mt-1.5">.</p>
             <p>{studio.name}</p>
           </div>
+
+          <Gallery images={images} maxRows={2} />
+
           <Card className="my-5">
             <CardContent className="px-8 py-5">
               <div className="flex flex-col gap-4 md:flex-row md:justify-between">
