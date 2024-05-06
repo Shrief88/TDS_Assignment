@@ -1,19 +1,22 @@
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { MapPin, Star, Clock4 } from "lucide-react";
-
 import { Gallery, Image } from "react-grid-gallery";
+
 import { Days } from "@/models/calendar";
 import { useTypedSelector } from "@/store";
 import { DeleteStudio } from "@/components/studio/DeleteStudio";
+import Error from "@/components/Error";
 import useStudio from "@/hooks/useStudio";
-import { useEffect, useState } from "react";
 
 const Studio = () => {
   const { id } = useParams();
-  const { studio, isloading, isError, isOpen } = useStudio(id as string);
+  const { studio, isloading, isError, statusCode, isOpen } = useStudio(
+    id as string
+  );
   const [images, setImages] = useState<Image[]>([]);
   const navigate = useNavigate();
   const user = useTypedSelector((state) => state.authState.user);
@@ -31,9 +34,14 @@ const Studio = () => {
     }
   }, [studio]);
 
+  if (statusCode === 404 || statusCode === 400) {
+    navigate("/NotFoundPage");
+  }
+
   return (
     <div className="font-Inter xl:px-24">
-      {!isloading && studio && (
+      {isError && <Error />}
+      {!isloading && !isError && studio && (
         <>
           <div className="flex items-center text-muted-foreground gap-1 text-sm pb-5">
             <NavLink to="/" className={"hover:underline"}>

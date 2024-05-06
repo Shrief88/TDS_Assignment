@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Studio from "./pages/Studio";
 import Reservation from "./pages/Reservation";
 import CreateStudio from "./pages/CreateStudio";
+import NotFoundPage from "./pages/NotFoundPage";
 import PersisttentLogin from "./components/PersisttentLogin";
 import Layout from "./components/layout/Layout";
 
@@ -25,6 +26,7 @@ function App() {
                   <Route path="/studio/:id" element={<Studio />} />
                   <Route path="/reservation/:id" element={<Reservation />} />
                   <Route path="/create-studio" element={<CreateStudio />} />
+                  <Route path="*" element={<NotFoundPage />} />
                 </Route>
               </Route>
             </Routes>

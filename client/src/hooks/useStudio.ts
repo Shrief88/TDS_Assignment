@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { axiosClient } from "../api/axios";
 
 import IStudio from "@/models/studio";
+import { AxiosError } from "axios";
 
 const useStudio = (id: string) => {
   const [studio, setStudio] = useState<IStudio>();
   const [isloading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [statusCode, setStatusCode] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
   const fetchData = useCallback(async (id: string) => {
@@ -17,6 +19,9 @@ const useStudio = (id: string) => {
       setIsOpen(res.data.isOpen);
       setIsLoading(false);
     } catch (err) {
+      if (err instanceof AxiosError) {
+        setStatusCode(err.response?.status || 0);
+      }
       setIsLoading(false);
       setIsError(true);
       console.log(err);
@@ -27,7 +32,7 @@ const useStudio = (id: string) => {
     fetchData(id);
   }, [fetchData, id]);
 
-  return { studio, isloading, isError, isOpen };
+  return { studio, statusCode, isloading, isError, isOpen };
 };
 
 export default useStudio;

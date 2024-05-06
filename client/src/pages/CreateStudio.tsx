@@ -47,8 +47,6 @@ const CreateStudio = () => {
         formData.append("images", image);
       }
 
-      console.log(formData.getAll("images"));
-
       formData.append("name", data.name);
       formData.append("address", data.address);
       formData.append("startTime", data.startTime.toString());
@@ -68,9 +66,11 @@ const CreateStudio = () => {
     } catch (err) {
       toast.dismiss();
       if (err instanceof AxiosError) {
-        if (err.response?.status === 409) {
-          toast.error(err.response.data.message);
-        } else if (err.response?.status === 400) {
+        if (
+          err.response?.status === 409 ||
+          err.response?.status === 404 ||
+          err.response?.status === 400
+        ) {
           toast.error(err.response.data.message);
         } else {
           toast.error("Something went wrong");
@@ -188,7 +188,9 @@ const CreateStudio = () => {
           />
         </div>
         <div className="flex justify-end py-6">
-          <Button type="submit" className="rounded-3xl text-base" size={"lg"}>Submit</Button>
+          <Button type="submit" className="rounded-3xl text-base" size={"lg"}>
+            Submit
+          </Button>
         </div>
       </form>
     </div>
