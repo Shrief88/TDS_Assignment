@@ -1,56 +1,31 @@
-import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
 
-import useAxiosToken from "@/hooks/useAxiosToken";
-import IStudio from "@/models/studio";
 import CardStudio from "./CardStudio";
-import IReservation from "@/models/reservation";
 import CardReservation from "./CardReservation";
+import SkeletonCard from "./SkeletonCard";
+import EmptyList from "../EmptyList";
+import Error from "../Error";
+import useStudios from "@/hooks/useStuidos";
+import useReservations from "@/hooks/useReservation";
 
 const CustomerView = () => {
-  const axiosClient = useAxiosToken();
-  const [studios, setStudios] = useState<IStudio[]>([]);
-  const [reservations, setReservations] = useState<IReservation[]>([]);
-  const [pastReservations, setPastReservations] = useState<IReservation[]>([]);
+  const {
+    studios,
+    isloading: isStLoading,
+    isError: isStError,
+  } = useStudios("/studio/me");
+
+  const {
+    reservations,
+    pastReservations,
+    isloading: isResLoading,
+    isError: isResError,
+  } = useReservations("/reservation/me");
+
   const navigate = useNavigate();
-
-  const fetchStudios = useCallback(async () => {
-    try {
-      const res = await axiosClient.get("studio/me");
-      setStudios(res.data.data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [axiosClient]);
-
-  const fetchReservations = useCallback(async () => {
-    try {
-      const res = await axiosClient.get("reservation/me");
-
-      const past_reservations: IReservation[] = [];
-      const current_reservations: IReservation[] = [];
-      (res.data.data as IReservation[]).map((reservation) => {
-        if (new Date(reservation.endDate).getTime() < new Date().getTime()) {
-          past_reservations.push(reservation);
-        } else {
-          current_reservations.push(reservation);
-        }
-      });
-
-      setReservations(current_reservations);
-      setPastReservations(past_reservations);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [axiosClient]);
-
-  useEffect(() => {
-    fetchStudios();
-    fetchReservations();
-  }, [fetchStudios, fetchReservations]);
 
   return (
     <Tabs defaultValue="reservations" className="font-Inter">
@@ -69,19 +44,41 @@ const CustomerView = () => {
       </div>
 
       <TabsContent value="reservations">
+        {isResLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14">
+            {[1, 2, 3, 4].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        )}
+        {isResError && <Error />}
+        {reservations.length === 0 && !isResLoading && !isResError && (
+          <EmptyList />
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-8 md:gap-x-8 py-4 md:py-10">
           {reservations.map((reservation) => (
             <CardReservation
               key={reservation.id}
               studioName={reservation.studio.name}
               customerName={reservation.customer.fullName}
-              startDate={new Date(reservation.startDate)}
-              endDate={new Date(reservation.endDate)}
+              startDate={reservation.startDate}
+              endDate={reservation.endDate}
             />
           ))}
         </div>
       </TabsContent>
       <TabsContent value="past_reservations">
+        {isResLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14">
+            {[1, 2, 3, 4].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        )}
+        {isResError && <Error />}
+        {reservations.length === 0 && !isResLoading && !isResError && (
+          <EmptyList />
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-8 md:gap-x-8 py-4 md:py-10">
           {pastReservations.map((reservation) => (
             <CardReservation
@@ -95,7 +92,16 @@ const CustomerView = () => {
         </div>
       </TabsContent>
       <TabsContent value="studios">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14 py-4 md:py-10">
+        {isStLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14">
+            {[1, 2, 3].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        )}
+        {isStError && <Error />}
+        {studios.length === 0 && !isStLoading && !isStError && <EmptyList />}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-14 md:gap-x-14">
           {studios.map((studio) => (
             <CardStudio
               id={studio.id}

@@ -8,7 +8,7 @@ import Studio from "./pages/Studio";
 import Reservation from "./pages/Reservation";
 import CreateStudio from "./pages/CreateStudio";
 import PersisttentLogin from "./components/PersisttentLogin";
-import Layout from "./components/Layout";
+import Layout from "./components/layout/Layout";
 
 function App() {
   return (
