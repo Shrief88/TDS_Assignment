@@ -36,7 +36,7 @@ model Reservations {
   id          String @id @default(uuid())
   customer    User @relation(fields: [customerId], references: [id])
   customerId  String
-  studio      Studio @relation(fields: [studioId], references: [id])
+  studio      Studio @relation(fields: [studioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   studioId    String
   startDate   DateTime
   endDate     DateTime
@@ -56,7 +56,7 @@ model Studio {
   owner           User @relation(fields: [ownerId], references: [id])
   ownerId         String
 
-  reservations    Reservations[]
+  reservations    Reservations[]  
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

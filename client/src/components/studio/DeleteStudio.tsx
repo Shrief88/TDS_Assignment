@@ -21,6 +21,7 @@ export const DeleteStudio = ({ id }: DeleteStudioProps) => {
       navigate("/");
       toast.success("Studio deleted successfully");
     } catch (err) {
+      toast.dismiss();
       if (err instanceof AxiosError) {
         if (err.response?.status === 403) {
           toast.error("You are not authorized to delete this studio");
