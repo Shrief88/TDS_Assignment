@@ -92,21 +92,17 @@ const Reservation = () => {
       const { startDate, endDate } = res.data.data as IReservation;
 
       toast.dismiss();
-      toast.success("Reservation created successfully");
+      toast.success(
+        "Reservation created successfully, you can cancel it within 15 minutes"
+      );
       setSelected(undefined);
       setDisabledDays((prev) => [...prev, { from: startDate, to: endDate }]);
     } catch (err) {
       toast.dismiss();
+      setSelected(undefined);
+      setTotalDaysSelected(0);
       if (err instanceof AxiosError) {
-        if (
-          err.response?.status === 409 ||
-          err.response?.status === 404 ||
-          err.response?.status === 400
-        ) {
-          toast.error(err.response.data.message);
-        } else {
-          toast.error("Something went wrong");
-        }
+        toast.error(err.response?.data.message);
       }
     }
   };

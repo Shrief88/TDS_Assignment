@@ -59,10 +59,10 @@ const EditStudio = ({ studio }: EditStudioProps) => {
 
   const onSubmit = async (value: TUpdateStudioSchema) => {
     try {
-      toast.loading("Updating profile...", { duration: Infinity });
+      toast.loading("Updating studio...", { duration: Infinity });
       await axiosClient.put(`studio/${studio.id}`, value);
       toast.dismiss();
-      toast.success("Profile updated successfully");
+      toast.success("Studio updated successfully");
       setTimeout(() => window.location.reload(), 1000);
     } catch (err) {
       toast.dismiss();
