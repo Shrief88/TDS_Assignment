@@ -87,7 +87,7 @@ export const createStudio: RequestHandler = async (
         startTime: parseInt(req.body.startTime) || req.body.startTime,
         endTime: parseInt(req.body.endTime) || req.body.endTime,
         address: req.body.address,
-        images: req.body.images || [],
+        images: req.body.images,
       },
     });
 

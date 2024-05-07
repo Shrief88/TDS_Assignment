@@ -1,6 +1,8 @@
 import { RequestHandler } from "express";
 import { CustomRequest } from "./auth";
 import prisma from "../config/prisma";
+import { sanitizeUser } from "../utils/sanitizeData";
+import { User } from "@prisma/client";
 
 // @route GET /api/v1/user
 // @access Private [Admin]
@@ -8,7 +10,7 @@ export const getUsers: RequestHandler = async (req, res, next) => {
   try {
     const users = await prisma.user.findMany();
     return res.status(200).json({
-      data: users,
+      data: users.map((user) => sanitizeUser(user)),
     });
   } catch (err) {
     next(err);
@@ -29,7 +31,7 @@ export const getUser: RequestHandler = async (
       },
     });
     return res.status(200).json({
-      data: user,
+      data: sanitizeUser(user as User),
     });
   } catch (err) {
     next(err);
@@ -53,7 +55,7 @@ export const updateFullName: RequestHandler = async (
     });
 
     return res.status(200).json({
-      data: user,
+      data: sanitizeUser(user as User),
     });
   } catch (err) {
     next(err);

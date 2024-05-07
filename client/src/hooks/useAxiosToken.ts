@@ -32,6 +32,9 @@ const useAxiosToken = () => {
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosClient(prevRequest);
         }
+        if(refreshAttempts === 3) {
+          localStorage.removeItem("refreshToken");
+        }
         return Promise.reject(error);
       }
     );
