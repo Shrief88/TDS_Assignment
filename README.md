@@ -69,10 +69,10 @@ Then add the following in your .env file
 ```bash
 PORT = 3000
 NODE_ENV = development
-BASE_URL = http://localhost:3000
+BASE_URL = http://localhost
 DATABASE_URL = postgres://<your psql username>:<your psql password>@localhost:5432/<your database name>?
-ACCESS_TOKEN_SECRET : xxxxxxxxxxxxx
-REFRESH_TOKEN_SECRET : xxxxxxxxxxxxxxx
+ACCESS_TOKEN_SECRET = xxxxxxxxxxxxx
+REFRESH_TOKEN_SECRET = xxxxxxxxxxxxxxx
 ```
 
 After that we will use prisma to create our schema tables based on schema.prisma file
