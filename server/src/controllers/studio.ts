@@ -26,7 +26,7 @@ export const getStudio: RequestHandler = async (req, res, next) => {
       },
       include: {
         reservations: true,
-      }
+      },
     });
 
     if (!studio) throw createHttpError(404, "Studio not found");
@@ -92,6 +92,36 @@ export const createStudio: RequestHandler = async (
     });
 
     res.status(201).json({ data: studio });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @route PUT /api/v1/studio/:id
+// @access Private (Studio Owner)
+export const updateStudio: RequestHandler = async (
+  req: CustomRequest,
+  res,
+  next,
+) => {
+  try {
+    console.log(req.body);
+    const studioData: Record<string, any> = {};
+    if (req.body.name) studioData.name = req.body.name;
+    if (req.body.availableDays)
+      studioData.availableDays = req.body.availableDays;
+    if (req.body.startTime) studioData.startTime = req.body.startTime;
+    if (req.body.endTime) studioData.endTime = req.body.endTime;
+    if (req.body.address) studioData.address = req.body.address;
+
+    const studio = await prisma.studio.update({
+      where: {
+        id: req.params.id,
+      },
+      data: studioData,
+    });
+
+    res.status(200).json({ data: studio });
   } catch (err) {
     next(err);
   }

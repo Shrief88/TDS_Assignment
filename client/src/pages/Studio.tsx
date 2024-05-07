@@ -11,6 +11,7 @@ import { useTypedSelector } from "@/store";
 import { DeleteStudio } from "@/components/studio/DeleteStudio";
 import Error from "@/components/Error";
 import useStudio from "@/hooks/useStudio";
+import EditStudio from "@/components/dialog/EditStudio";
 
 const Studio = () => {
   const { id } = useParams();
@@ -81,9 +82,7 @@ const Studio = () => {
                   {user?.type === "STUDIO_OWNER" &&
                   user.id === studio.ownerId ? (
                     <>
-                      <Button className="rounded-3xl font-semibold w-28">
-                        Edit
-                      </Button>
+                      <EditStudio studio={studio} />
                       <DeleteStudio id={studio.id} />
                     </>
                   ) : (

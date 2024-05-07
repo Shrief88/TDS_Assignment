@@ -112,7 +112,7 @@ const CreateStudio = () => {
                   })
                 }
                 className="rounded-3xl"
-                defaultOptions={OPTIONS}
+                options={OPTIONS}
                 placeholder="Select available days"
               />
               {errors.availableDays && (
@@ -143,7 +143,7 @@ const CreateStudio = () => {
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="endTime" className="text-sm">
-                Studio Address
+                Studio end hour
               </Label>
               <Input
                 id="endTime"

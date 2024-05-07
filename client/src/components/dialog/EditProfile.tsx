@@ -19,6 +19,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import useAxiosToken from "@/hooks/useAxiosToken";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 interface EditProfileProps {
   defaultFullName: string;
@@ -44,8 +45,9 @@ const EditProfile = ({ defaultFullName }: EditProfileProps) => {
       setTimeout(() => window.location.reload(), 1000);
     } catch (err) {
       toast.dismiss();
-      toast.error("Something went wrong");
-      console.log(err);
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data.message);
+      }
     }
   };
 
@@ -65,23 +67,23 @@ const EditProfile = ({ defaultFullName }: EditProfileProps) => {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullName" className="text-right">
+          <div className="flex flex-col gap-4 py-4">
+            <div className="grid grid-cols-7 items-center">
+              <Label htmlFor="fullName" className="text-left">
                 Name
               </Label>
               <Input
                 id="fullName"
                 {...register("fullName")}
                 defaultValue={defaultFullName}
-                className="col-span-3"
+                className="col-span-6"
               />
-              {errors.fullName && (
-                <span className="text-sm text-red-500">
-                  {errors.fullName.message}
-                </span>
-              )}
             </div>
+            {errors.fullName && (
+              <span className="text-sm text-red-500">
+                {errors.fullName.message}
+              </span>
+            )}
           </div>
           <DialogFooter>
             <Button type="submit">Save changes</Button>

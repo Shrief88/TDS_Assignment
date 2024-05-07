@@ -29,6 +29,14 @@ studioRouter.post(
   studioController.createStudio,
 );
 
+studioRouter.put(
+  "/:id",
+  authController.protectRoute,
+  authController.restrictTo("STUDIO_OWNER"),
+  studioValidator.updateStudio,
+  studioController.updateStudio,
+);
+
 studioRouter.delete(
   "/:id",
   authController.protectRoute,
