@@ -19,7 +19,7 @@ const CardStudio = ({ id, cover, name, address }: CardStudioProps) => {
       <div className="flex flex-col h-full">
         <CardHeader>
           <img
-            src={import.meta.env.VITE_IMAGES_URI + "/" + cover}
+            src={import.meta.env.VITE_IMAGES_URI + "/studio/" + cover}
             className="w-full"
           />
         </CardHeader>

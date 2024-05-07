@@ -133,7 +133,7 @@ const Reservation = () => {
                 <div className="rounded-lg overflow-hidden w-fit">
                   <img
                     src={
-                      import.meta.env.VITE_IMAGES_URI + "/" + studio.images[0]
+                      import.meta.env.VITE_IMAGES_URI + "/studio/" + studio.images[0]
                     }
                     className="h-16 w-20 md:h-20"
                   />

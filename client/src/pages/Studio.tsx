@@ -26,7 +26,7 @@ const Studio = () => {
     if (studio) {
       const tmp: Image[] = studio.images.map((image) => {
         return {
-          src: import.meta.env.VITE_IMAGES_URI + "/" + image,
+          src: import.meta.env.VITE_IMAGES_URI + "/studio/" + image,
           width: 340,
           height: 190,
         } as Image;
