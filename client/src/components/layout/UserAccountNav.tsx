@@ -1,5 +1,3 @@
-import { NavLink } from "react-router-dom";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +5,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, UserCircle2Icon } from "lucide-react";
+import { Edit, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import EditProfile from "../dialog/EditProfile";
 
 interface UserAccountNavProps {
   username: string;
@@ -17,7 +16,7 @@ interface UserAccountNavProps {
 
 const UserAccountNav = ({ username }: UserAccountNavProps) => {
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     window.location.href = "/login";
   };
 
@@ -39,12 +38,8 @@ const UserAccountNav = ({ username }: UserAccountNavProps) => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-card">
-        <NavLink to={"/user/me"}>
-          <DropdownMenuItem className="cursor-pointer">
-            <UserCircle2Icon className="mr-2 h-4 w-4" />
-            <p>Profile</p>
-          </DropdownMenuItem>
-        </NavLink>
+        <EditProfile defaultFullName={username} />
+
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
