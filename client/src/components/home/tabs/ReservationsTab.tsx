@@ -30,11 +30,13 @@ const ReservationTab = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-8 md:gap-x-8 py-4 md:py-10">
         {reservations.map((reservation) => (
           <CardReservation
+            id={reservation.id}
             key={reservation.id}
             studioName={reservation.studio.name}
             customerName={reservation.customer.fullName}
             startDate={reservation.startDate}
             endDate={reservation.endDate}
+            createdAt={reservation.createdAt}
           />
         ))}
       </div>

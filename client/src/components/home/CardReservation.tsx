@@ -1,18 +1,51 @@
+import { useEffect, useState } from "react";
+
+import { useTypedSelector } from "@/store";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import { Button } from "../ui/button";
+import useAxiosToken from "@/hooks/useAxiosToken";
+import { toast } from "sonner";
 
 interface CardReservationProps {
+  id: string;
   studioName: string;
   customerName: string;
   startDate: Date;
   endDate: Date;
+  createdAt: Date;
 }
 
 const CardReservation = ({
+  id,
   studioName,
   customerName,
   startDate,
   endDate,
+  createdAt,
 }: CardReservationProps) => {
+  const user = useTypedSelector((state) => state.authState.user);
+  const [isAllowedToCancel, setIsAllowedToCancel] = useState(false);
+  const axiosToken = useAxiosToken();
+
+  useEffect(() => {
+    if (user && user.type === "CUSTOMER") {
+      const diff = (new Date().getTime() - new Date(createdAt).getTime()) / (1000 * 60);
+      if (diff < 15) setIsAllowedToCancel(true);
+    }
+  }, [user, createdAt]);
+
+  const handlecancellation = async () => {
+    try {
+      toast.loading("Cancelling reservation...", { duration: Infinity });
+      const res = await axiosToken.delete(`/reservation/${id}`);
+      toast.dismiss();
+      toast.success("Reservation cancelled successfully");
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      toast.dismiss();
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="flex flex-col px-5 pt-5">
@@ -42,9 +75,13 @@ const CardReservation = ({
           </p>
         </div>
       </CardContent>
-      <CardFooter className="px-5 py-3 border-t">
-        <p className="text-primary">Cancel</p>
-      </CardFooter>
+      {isAllowedToCancel && (
+        <CardFooter className="py-3 border-t px-0">
+          <Button variant={"ghost"} className="text-primary mx-3" onClick={handlecancellation}>
+            Cancel
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };
