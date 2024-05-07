@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Search } from "lucide-react";
 import { useTypedSelector } from "@/store";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import UserAccountNav from "./UserAccountNav";
 
 const Navbar = () => {
   const user = useTypedSelector((state) => state.authState.user);
@@ -45,18 +46,7 @@ const Navbar = () => {
 
           {user && (
             <>
-              <Button
-                variant="ghost"
-                className="font-semibold px-0 md:px-4"
-                onClick={logout}
-              >
-                Logout
-              </Button>
-              <Avatar>
-                <AvatarFallback>
-                  {user.fullName.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+              <UserAccountNav username={user.fullName}  />
             </>
           )}
         </div>
