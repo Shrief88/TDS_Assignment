@@ -13,12 +13,14 @@ import useAxiosToken from "@/hooks/useAxiosToken";
 import useStudio from "@/hooks/useStudio";
 import IReservation from "@/models/reservation";
 import Error from "@/components/Error";
+import { useTypedSelector } from "@/store";
 
 const Reservation = () => {
   const [selected, setSelected] = useState<DateRange | undefined>();
   const [totalDaysSelected, setTotalDaysSelected] = useState(0);
   const { id } = useParams();
   const axiosClient = useAxiosToken();
+  const user = useTypedSelector((state) => state.authState.user);
   const { studio, isloading, isError, statusCode } = useStudio(id as string);
   const navigate = useNavigate();
   const [disabledDays, setDisabledDays] = useState<Matcher[]>([
@@ -28,6 +30,8 @@ const Reservation = () => {
   if (statusCode === 404 || statusCode === 400) {
     navigate("/NotFoundPage");
   }
+
+  console.log(user);
 
   useEffect(() => {
     if (studio) {
@@ -63,6 +67,14 @@ const Reservation = () => {
 
   const handleSubmit = async () => {
     try {
+      if (!user) {
+        toast.error("Please login first");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+        return;
+      }
+
       if (!selected?.from) {
         toast.error("Please select a date range");
         return;

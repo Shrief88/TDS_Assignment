@@ -10,6 +10,7 @@ import CreateStudio from "./pages/CreateStudio";
 import NotFoundPage from "./pages/NotFoundPage";
 import PersisttentLogin from "./components/PersisttentLogin";
 import Layout from "./components/layout/Layout";
+import RestrictAccess from "./components/RestrictAccess";
 
 function App() {
   return (
@@ -25,7 +26,9 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/studio/:id" element={<Studio />} />
                   <Route path="/reservation/:id" element={<Reservation />} />
-                  <Route path="/create-studio" element={<CreateStudio />} />
+                  <Route element={<RestrictAccess type="STUDIO_OWNER" />}>
+                    <Route path="/create-studio" element={<CreateStudio />} />
+                  </Route>
                   <Route path="*" element={<NotFoundPage />} />
                 </Route>
               </Route>
