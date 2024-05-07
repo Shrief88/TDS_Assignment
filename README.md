@@ -51,7 +51,7 @@ Now you successfully created the necessary databases to start the project.
 
 ## Server configuration
 
-After cloning the repo, open your terminal and type the following commands
+First you need node installed on your machine, after making sure of that you can clone the repo, open your terminal and type the following commands
 
 ```bash
   cd server
