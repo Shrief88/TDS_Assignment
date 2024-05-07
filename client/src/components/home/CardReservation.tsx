@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 
 import { useTypedSelector } from "@/store";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
@@ -29,7 +30,8 @@ const CardReservation = ({
 
   useEffect(() => {
     if (user && user.type === "CUSTOMER") {
-      const diff = (new Date().getTime() - new Date(createdAt).getTime()) / (1000 * 60);
+      const diff =
+        (new Date().getTime() - new Date(createdAt).getTime()) / (1000 * 60);
       if (diff < 15) setIsAllowedToCancel(true);
     }
   }, [user, createdAt]);
@@ -37,12 +39,15 @@ const CardReservation = ({
   const handlecancellation = async () => {
     try {
       toast.loading("Cancelling reservation...", { duration: Infinity });
-      const res = await axiosToken.delete(`/reservation/${id}`);
+      await axiosToken.delete(`/reservation/${id}`);
       toast.dismiss();
       toast.success("Reservation cancelled successfully");
       setTimeout(() => window.location.reload(), 1000);
     } catch (err) {
       toast.dismiss();
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data.message);
+      }
     }
   };
 
@@ -77,7 +82,11 @@ const CardReservation = ({
       </CardContent>
       {isAllowedToCancel && (
         <CardFooter className="py-3 border-t px-0">
-          <Button variant={"ghost"} className="text-primary mx-3" onClick={handlecancellation}>
+          <Button
+            variant={"ghost"}
+            className="text-primary mx-3"
+            onClick={handlecancellation}
+          >
             Cancel
           </Button>
         </CardFooter>

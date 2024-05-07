@@ -105,7 +105,6 @@ export const updateStudio: RequestHandler = async (
   next,
 ) => {
   try {
-    console.log(req.body);
     const studioData: Record<string, any> = {};
     if (req.body.name) studioData.name = req.body.name;
     if (req.body.availableDays)

@@ -31,8 +31,6 @@ const Reservation = () => {
     navigate("/NotFoundPage");
   }
 
-  console.log(user);
-
   useEffect(() => {
     if (studio) {
       const workingDays = studio.availableDays;

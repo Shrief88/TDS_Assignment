@@ -58,7 +58,6 @@ const EditStudio = ({ studio }: EditStudioProps) => {
   }, [studio]);
 
   const onSubmit = async (value: TUpdateStudioSchema) => {
-    console.log(value);
     try {
       toast.loading("Updating profile...", { duration: Infinity });
       await axiosClient.put(`studio/${studio.id}`, value);
