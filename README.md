@@ -118,3 +118,21 @@ VITE_IMAGES_URI = http://localhost:3000
 ```
 
 After follwing this steps you are ready to use the app.
+
+## Running the app 
+
+For running the Express app 
+
+```bash
+cd server 
+npm run dev
+```
+
+For running the React app
+
+```bash
+cd client
+npm run dev 
+```
+
+***After following these steps, you should now have a React app running on port 5173, an Express app running on port 3000, and a PostgreSQL database running on port 5432.***

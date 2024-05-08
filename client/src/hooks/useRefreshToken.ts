@@ -20,7 +20,7 @@ const useRefreshToken = () => {
       return response.data.accessToken;
     } catch (err) {
       console.log(err);
-      navigate("/login");
+      navigate("/");
     }
   };
 
